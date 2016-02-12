@@ -1,0 +1,1881 @@
+<!DOCTYPE html>    
+<head>
+    <meta charset="utf-8">
+    <title>fabric.js project template</title>
+	
+	<!-- Get version 1.5.0 of Fabric.js from CDN -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.min.js" ></script>
+ 
+
+	 
+<body>
+		<!-- canvas tag for Fabric.js to draw into -->
+		<canvas id="c" width="4140" height="2200" style="border:2px solid black;" ></canvas>
+    <img src="statusicons/5.png" id="icon5" style="visibility:hidden">
+    <img src="statusicons/1.png" id="icon1" style="visibility:hidden">
+    <img src="statusicons/2.png" id="icon2" style="visibility:hidden">
+    <img src="statusicons/3.png" id="icon3" style="visibility:hidden">
+    <img src="statusicons/4.png" id="icon4" style="visibility:hidden">
+    <img src="statusicons/on.png" id="onbtn" style="visibility:hidden">
+    <img src="statusicons/off.png" id="offbtn" style="visibility:hidden">
+    <img src="statusicons/shower.png" id="showerslider" style="visibility:hidden">
+    <img src="statusicons/bath.png" id="bathslider" style="visibility:hidden">
+    <img src="statusicons/users.png" id="users" style="visibility:hidden">
+    <img src="statusicons/water.png" id="water" style="visibility:hidden">
+    <img src="statusicons/temp.png" id="temp" style="visibility:hidden">
+    <img src="statusicons/bathtub.png" id="bathtub" style="visibility:hidden">
+    <img src="statusicons/music.png" id="music" style="visibility:hidden">
+    <img src="statusicons/bulb.png" id="light" style="visibility:hidden">
+    <img src="statusicons/adduser.png" id="adduser" style="visibility:hidden">
+    <img src="statusicons/user1.png" id="user1" style="visibility:hidden">
+    <img src="statusicons/user2.png" id="user2" style="visibility:hidden">
+    <img src="statusicons/user3.png" id="user3" style="visibility:hidden">
+    <img src="statusicons/guest.png" id="guest" style="visibility:hidden">
+    <img src="statusicons/classical.png" id="classical" style="visibility:hidden">
+    <img src="statusicons/pop.png" id="pop" style="visibility:hidden">
+    <img src="statusicons/jazz.png" id="jazz" style="visibility:hidden">
+    <img src="statusicons/rock.png" id="rock" style="visibility:hidden">
+    <img src="statusicons/metal.png" id="metal" style="visibility:hidden">
+    <img src="statusicons/soap.png" id="soap" style="visibility:hidden">
+    <img src="statusicons/shampoo.png" id="shampoo" style="visibility:hidden">
+    <img src="statusicons/facewash.png" id="facewash" style="visibility:hidden">
+    <img src="statusicons/back.png" id="back" style="visibility:hidden">
+    <img src="statusicons/light.png" id="lightbulb" style="visibility:hidden">
+    <img src="statusicons/showericon.png" id="showericon" style="visibility:hidden">
+    <img src="statusicons/bathtubimg.png" id="bathtubimg" style="visibility:hidden">
+    <img src="statusicons/plug.png" id="plug" style="visibility:hidden">
+    <img src="statusicons/knob.png" id="knob" style="visibility:hidden">
+    <img src="statusicons/speaker.png" id="speaker" style="visibility:hidden">
+    <img src="statusicons/showerarrow.png" id="showerarrow" style="visibility:hidden">
+    <img src="statusicons/faucet.png" id="faucet" style="visibility:hidden">
+    <img src="statusicons/up.png" id="up" style="visibility:hidden">
+    <img src="statusicons/down.png" id="down" style="visibility:hidden">
+    <img src="statusicons/textbox.png" id="textbox" style="visibility:hidden">
+    <img src="statusicons/watertemp.png" id="watertemp" style="visibility:hidden">
+    <img src="statusicons/volume.png" id="volume" style="visibility:hidden">
+    <img src="statusicons/mute.png" id="mute" style="visibility:hidden">
+    <img src="statusicons/sound.png" id="sound" style="visibility:hidden">
+    <img src="statusicons/settings.png" id="settings" style="visibility:hidden">
+    <img src="statusicons/handle.png" id="handle" style="visibility:hidden">
+
+
+
+
+
+
+</body>
+ 
+<script>
+
+
+// within the code below I assume I am drawing into a 1860x990 box
+// then I can scale the group to whatever size the final canvas is
+// in this case 4140 x 2200 for the wall
+// you should pick an appropriate local size and canvas size that are easy for you to work with
+
+(function() {
+
+  var localHeight = 990;
+  var localWidth = 1860;
+
+  var canvas = this.__canvas = new fabric.Canvas('c');
+
+  canvas.backgroundColor = "#5555F5"; // background blue to help find it
+  //fabric.Object.prototype.transparentCorners = false;
+
+/*
+  canvas.on('mouse:over', function(e) {
+    console.log(e.target);
+    //canvas.renderAll();
+  });
+
+  canvas.on('mouse:out', function(e) {
+    console.log(e.target);
+    //canvas.renderAll();
+  });
+*/
+
+
+var backWall = new fabric.Rect({
+  left: 0,
+  top: 0,
+  fill: 'white',
+  stroke: 'black',
+  width: 450,
+  height: localHeight,
+  angle: 0
+});
+backWall.hasControls = backWall.hasBorders = false;
+backWall.lockMovementX = backWall.lockMovementY = true;
+
+var sideWall = new fabric.Rect({
+  left: 450,
+  top: 0,
+  fill: 'white',
+  stroke: 'black',
+  width: 960,
+  height: localHeight,
+  angle: 0
+});
+sideWall.hasControls = sideWall.hasBorders = false;
+sideWall.lockMovementX = sideWall.lockMovementY = true;
+
+var frontWall = new fabric.Rect({
+  left: 1410,
+  top: 0,
+  fill: 'white',
+  stroke: 'black',
+  width: 450,
+  height: localHeight,
+  angle: 0
+});
+frontWall.hasControls = frontWall.hasBorders = false;
+frontWall.lockMovementX = frontWall.lockMovementY = true;
+
+// temp and water quantity variables
+
+var waterTemp = 0;
+var waterQuan = 0;
+
+
+
+
+
+
+
+var plugx = document.getElementById('plug');
+var plug = new fabric.Image(plugx, {
+  left: 180,
+  top: 500,
+  angle: 0,
+  
+  width:64, height:64,
+  originY: 'center', originX: 'center',
+  
+});
+
+plug.hasControls = plug.hasBorders = false;
+plug.lockMovementX = plug.lockMovementY = true;
+
+var knobx = document.getElementById('knob');
+var knob = new fabric.Image(knobx, {
+  left: 1615,
+  top: 400,
+  angle: 0,
+  
+  width:32, height:32,
+  originY: 'center', originX: 'center',
+  
+});
+
+knob.hasControls = knob.hasBorders = false;
+knob.lockMovementX = knob.lockMovementY = true;
+
+var knob2x = document.getElementById('knob');
+var knob2 = new fabric.Image(knob2x, {
+  left: 1675,
+  top: 400,
+  angle: 0,
+  
+  width:32, height:32,
+  originY: 'center', originX: 'center',
+  
+});
+
+knob2.hasControls = knob2.hasBorders = false;
+knob2.lockMovementX = knob2.lockMovementY = true;
+
+knob.on('selected',function(){
+    knob.angle = knob.angle +30;
+    canvas.deactivateAll();
+});
+
+knob2.on('selected',function(){
+    knob2.angle = knob2.angle +30;
+    canvas.deactivateAll();
+});
+
+
+var low1 = new fabric.Text('L', { left: 1600, top: 415, fontFamily: 'Arial', fontSize: 8, originX: 'center',
+  originY: 'center', });
+low1.hasControls = low1.hasBorders = false;
+low1.lockMovementX = low1.lockMovementY = true;
+low1.selectable = false
+low1.evented = false
+
+var low2 = new fabric.Text('L', { left: 1660, top: 415, fontFamily: 'Arial', fontSize: 8, originX: 'center',
+  originY: 'center', });
+low2.hasControls = low2.hasBorders = false;
+low2.lockMovementX = low2.lockMovementY = true;
+low2.selectable = false;
+low2.evented = false;
+
+var high1 = new fabric.Text('H', { left: 1632, top: 415, fontFamily: 'Arial', fontSize: 8, originX: 'center',
+  originY: 'center', });
+high1.hasControls = high1.hasBorders = false;
+high1.lockMovementX = high1.lockMovementY = true;
+high1.selectable = false;
+high1.evented = false;
+
+var high2 = new fabric.Text('H', { left: 1692, top: 415, fontFamily: 'Arial', fontSize: 8, originX: 'center',
+  originY: 'center', });
+high2.hasControls = high2.hasBorders = false;
+high2.lockMovementX = high2.lockMovementY = true;
+high2.selectable = false;
+high2.evented = false;
+
+var tempT = new fabric.Text('T', { left: 1615, top: 370, fontFamily: 'Arial', fontSize: 16, originX: 'center',
+  originY: 'center', });
+tempT.hasControls = tempT.hasBorders = false;
+tempT.lockMovementX = tempT.lockMovementY = true;
+tempT.selectable = false;
+tempT.evented = false;
+
+var waterW = new fabric.Text('W', { left: 1675, top: 370, fontFamily: 'Arial', fontSize: 16, originX: 'center',
+  originY: 'center', });
+waterW.hasControls = waterW.hasBorders = false;
+waterW.lockMovementX = waterW.lockMovementY = true;
+waterW.selectable = false;
+waterW.evented = false;
+
+var faucet1x = document.getElementById('faucet');
+var faucet1 = new fabric.Image(faucet1x, {
+  left: 1675,
+  top: 450,
+  angle: 0,
+  
+  width:32, height:32,
+  originY: 'center', originX: 'center',
+  
+});
+faucet1.hasControls = faucet1.hasBorders = false;
+faucet1.lockMovementX = faucet1.lockMovementY = true;
+
+var shampoo2x = document.getElementById('shampoo');
+var shampoo2 = new fabric.Image(shampoo2x, {
+  left: 1650,
+  top: 450,
+  angle: 0,
+  width:20, height:20,
+  originY: 'center', originX: 'center',
+  
+});
+
+shampoo2.hasControls = shampoo2.hasBorders = false;
+shampoo2.lockMovementX = shampoo2.lockMovementY = true;
+
+var faucet2x = document.getElementById('faucet');
+var faucet2 = new fabric.Image(faucet2x, {
+  left: 1605,
+  top: 450,
+  angle: 0,
+  
+  width:32, height:32,
+  originY: 'center', originX: 'center',
+  
+});
+
+
+
+var soap2x = document.getElementById('soap');
+var soap2 = new fabric.Image(soap2x, {
+  left: 1575,
+  top: 450,
+  angle: 0,
+  width:20, height:20,
+  originY: 'center', originX: 'center',
+  
+});
+soap2.hasControls = soap2.hasBorders = false;
+soap2.lockMovementX = soap2.lockMovementY = true;
+
+faucet2.hasControls = faucet2.hasBorders = false;
+faucet2.lockMovementX = faucet2.lockMovementY = true;
+
+var faucet3x = document.getElementById('faucet');
+var faucet3 = new fabric.Image(faucet3x, {
+  left: 1740,
+  top: 450,
+  angle: 0,
+  
+  width:32, height:32,
+  originY: 'center', originX: 'center',
+  
+});
+
+faucet3.hasControls = faucet3.hasBorders = false;
+faucet3.lockMovementX = faucet3.lockMovementY = true;
+
+var facewash2x = document.getElementById('facewash');
+var facewash2 = new fabric.Image(facewash2x, {
+  left: 1715,
+  top: 450,
+  angle: 0,
+  width:20, height:20,
+  originY: 'center', originX: 'center',
+  
+});
+facewash2.hasControls = facewash2.hasBorders = false;
+facewash2.lockMovementX = facewash2.lockMovementY = true;
+
+
+
+
+var bathtubimgx = document.getElementById('bathtubimg');
+var bathtubimg = new fabric.Image(bathtubimgx, {
+  left: 930,
+  top: 900,
+  angle: 0,
+  
+  width:960, height:256,
+  originY: 'center', originX: 'center',
+  
+});
+
+bathtubimg.hasControls = bathtubimg.hasBorders = false;
+bathtubimg.lockMovementX = bathtubimg.lockMovementY = true;
+
+
+
+var bathSpout = new fabric.Rect({
+  left: 1635,
+  top: 750,
+  originX: 'center',
+  originY: 'center',
+  fill: 'grey',
+  stroke: 'black',
+  width: 60,
+  height: 30,
+  angle: 0
+});
+
+bathSpout.hasControls = bathSpout.hasBorders = false;
+bathSpout.lockMovementX = bathSpout.lockMovementY = true;
+
+
+var lightbulbx = document.getElementById('lightbulb');
+var lightbulb = new fabric.Image(lightbulbx, {
+  left: 1635,
+  top: 25,
+  angle: 0,
+  opacity: 0.3,
+  width:40, height:40,
+  originY: 'center', originX: 'center',
+  
+});
+
+lightbulb.hasControls = lightbulb.hasBorders = false;
+lightbulb.lockMovementX = lightbulb.lockMovementY = true;
+
+
+var speaker1x = document.getElementById('speaker');
+var speaker1 = new fabric.Image(speaker1x, {
+  left: 10,
+  top: 8,
+  angle: 0,
+  
+  width:20, height:20,
+  originY: 'center', originX: 'center',
+  
+});
+
+speaker1.hasControls = speaker1.hasBorders = false;
+speaker1.lockMovementX = speaker1.lockMovementY = true;
+
+var speaker2x = document.getElementById('speaker');
+var speaker2 = new fabric.Image(speaker2x, {
+  left: 440,
+  top: 8,
+  angle: 180,
+  
+  width:20, height:20,
+  originY: 'center', originX: 'center',
+  
+});
+
+speaker2.hasControls = speaker2.hasBorders = false;
+speaker2.lockMovementX = speaker2.lockMovementY = true;
+
+
+// this lets me 'select' it but I cant keep clicking on it more than once
+
+var showerheadx = document.getElementById('showericon');
+var showerHead = new fabric.Image(showerheadx, {
+  left: 1635,
+  top: 100,
+  width:60, height:60,
+  originY: 'center', originX: 'center',
+  
+});
+
+showerHead.hasControls = showerHead.hasBorders = false;
+showerHead.lockMovementX = showerHead.lockMovementY = true;
+
+var showerarrowx = document.getElementById('showerarrow');
+var showerarrow = new fabric.Image(showerarrowx, {
+  left: 1635,
+  top: 60,
+  angle: -90,
+  width:30, height:60,
+  originY: 'center', originX: 'center',
+  
+});
+
+showerarrow.hasControls = showerarrow.hasBorders = false;
+showerarrow.lockMovementX = showerarrow.lockMovementY = true;
+
+
+showerHead.on('selected',function(){
+  if(showerHead.angle==0){
+  showerHead.angle = 30;
+  }
+  else if(showerHead.angle==30){
+    showerHead.angle = 60;
+  }
+
+  else if (showerHead.angle==60) {
+    showerHead.angle = 0;
+  };
+  canvas.deactivateAll();
+
+
+});
+
+
+// as a quick test I could have a 'button' that changes colour when I press it
+var panel = new fabric.Rect({
+    left: 950, top: 500, fill: '#DCDCDC', width: 200, height: 200,originX: 'center', originY: 'center',
+
+});
+panel.hasControls = panel.hasBorders = false;
+panel.lockMovementX = panel.lockMovementY = true;
+
+var handlex = document.getElementById('handle');
+var handle = new fabric.Image(handlex, {
+  left: 950,
+  top: 300,
+  angle: -90,
+  width:40, height:60,
+  originY: 'center', originX: 'center',
+  
+});
+handle.hasControls = handle.hasBorders = false;
+handle.lockMovementX = handle.lockMovementY = true;
+
+
+
+
+
+// Start of menu panel
+
+//on/off bath/shower icons
+var soapx = document.getElementById('soap');
+var soap = new fabric.Image(soapx, {
+  left: 880,
+  top: 550,
+  angle: 0,
+  width:20, height:20,
+  originY: 'center', originX: 'center',
+  
+});
+soap.hasControls = soap.hasBorders = false;
+soap.lockMovementX = soap.lockMovementY = true;
+
+var shampoox = document.getElementById('shampoo');
+var shampoo = new fabric.Image(shampoox, {
+  left: 940,
+  top: 550,
+  angle: 0,
+  width:20, height:20,
+  originY: 'center', originX: 'center',
+  
+});
+
+shampoo.hasControls = shampoo.hasBorders = false;
+shampoo.lockMovementX = shampoo.lockMovementY = true;
+
+var facewashx = document.getElementById('facewash');
+var facewash = new fabric.Image(facewashx, {
+  left: 1000,
+  top: 550,
+  angle: 0,
+  width:20, height:20,
+  originY: 'center', originX: 'center',
+  
+});
+facewash.hasControls = facewash.hasBorders = false;
+facewash.lockMovementX = facewash.lockMovementY = true;
+
+
+var icon5 = document.getElementById('icon5');
+var icon4 = document.getElementById('icon4');
+var icon2 = document.getElementById('icon2');
+var icon3 = document.getElementById('icon3');
+var icon1 = document.getElementById('icon1');
+
+
+
+
+var soapicon5 = new fabric.Image(icon5, {
+  left: 900,
+  top: 550,
+  angle: 0,
+  originY: 'center', originX: 'center',
+  
+});
+
+
+var soapicon1 = new fabric.Image(icon1, {
+  left: 900,
+  top: 550,
+  angle: 0,
+  visible: false,
+  originY: 'center', originX: 'center',
+  
+});
+
+var soapicon2 = new fabric.Image(icon2, {
+  left: 900,
+  top: 550,
+  angle: 0,
+  visible: false,
+  originY: 'center', originX: 'center',
+  
+});
+
+var soapicon3 = new fabric.Image(icon3, {
+  left: 900,
+  top: 550,
+  angle: 0,
+  visible: false,
+  originY: 'center', originX: 'center',
+  
+});
+
+var soapicon4 = new fabric.Image(icon4, {
+  left: 900,
+  top: 550,
+  angle: 0,
+  visible: false,
+  originY: 'center', originX: 'center',
+  
+});
+
+
+var shampooicon5 = new fabric.Image(icon5, {
+  left: 960,
+  top: 550,
+  angle: 0,
+  originY: 'center', originX: 'center',
+  
+});
+
+
+var shampooicon1 = new fabric.Image(icon1, {
+  left: 960,
+  top: 550,
+  angle: 0,
+  visible: false,
+  originY: 'center', originX: 'center',
+  
+});
+
+var shampooicon2 = new fabric.Image(icon2, {
+  left: 960,
+  top: 550,
+  angle: 0,
+  visible: false,
+  originY: 'center', originX: 'center',
+  
+});
+
+var shampooicon3 = new fabric.Image(icon3, {
+  left: 960,
+  top: 550,
+  angle: 0,
+  visible: false,
+  originY: 'center', originX: 'center',
+  
+});
+var shampooicon4 = new fabric.Image(icon4, {
+  left: 960,
+  top: 550,
+  angle: 0,
+  visible: false,
+  originY: 'center', originX: 'center',
+  
+});
+
+var facewashicon5 = new fabric.Image(icon5, {
+  left: 1020,
+  top: 550,
+  angle: 0,
+  originY: 'center', originX: 'center',
+  
+});
+
+
+var facewashicon1 = new fabric.Image(icon1, {
+  left: 1020,
+  top: 550,
+  angle: 0,
+  visible: false,
+  originY: 'center', originX: 'center',
+  
+});
+
+var facewashicon2 = new fabric.Image(icon2, {
+  left: 1020,
+  top: 550,
+  angle: 0,
+  visible: false,
+  originY: 'center', originX: 'center',
+  
+});
+
+var facewashicon3 = new fabric.Image(icon3, {
+  left: 1020,
+  top: 550,
+  angle: 0,
+  visible: false,
+  originY: 'center', originX: 'center',
+  
+});
+var facewashicon4 = new fabric.Image(icon4, {
+  left: 1020,
+  top: 550,
+  angle: 0,
+  visible: false,
+  originY: 'center', originX: 'center',
+  
+});
+
+soap.on('selected',function(){
+    if(soapicon5.visible==true){
+      soapicon5.visible=false;
+      soapicon4.visible=true;
+      canvas.deactivateAll();
+    }
+    else if(soapicon4.visible==true){
+      soapicon4.visible=false;
+      soapicon3.visible=true;
+      canvas.deactivateAll();
+    }
+    else if(soapicon3.visible==true){
+      soapicon3.visible=false;
+      soapicon2.visible=true;
+      canvas.deactivateAll();
+    }
+    else if(soapicon2.visible==true){
+      soapicon2.visible=false;
+      soapicon1.visible=true;
+      canvas.deactivateAll();
+    }
+
+});
+
+shampoo.on('selected',function(){
+    if(shampooicon5.visible==true){
+      shampooicon5.visible=false;
+      shampooicon4.visible=true;
+      canvas.deactivateAll();
+    }
+    else if(shampooicon4.visible==true){
+      shampooicon4.visible=false;
+      shampooicon3.visible=true;
+      canvas.deactivateAll();
+    }
+    else if(shampooicon3.visible==true){
+      shampooicon3.visible=false;
+      shampooicon2.visible=true;
+      canvas.deactivateAll();
+    }
+    else if(shampooicon2.visible==true){
+      shampooicon2.visible=false;
+      shampooicon1.visible=true;
+      canvas.deactivateAll();
+    }
+
+});
+
+facewash.on('selected',function(){
+    if(facewashicon5.visible==true){
+      facewashicon5.visible=false;
+      facewashicon4.visible=true;
+      canvas.deactivateAll();
+    }
+    else if(facewashicon4.visible==true){
+      facewashicon4.visible=false;
+      facewashicon3.visible=true;
+      canvas.deactivateAll();
+    }
+    else if(facewashicon3.visible==true){
+      facewashicon3.visible=false;
+      facewashicon2.visible=true;
+      canvas.deactivateAll();
+    }
+    else if(facewashicon2.visible==true){
+      facewashicon2.visible=false;
+      facewashicon1.visible=true;
+      canvas.deactivateAll();
+    }
+
+});
+
+
+
+var musicText = new fabric.Text('♫ No Music Playing ♫', { left: 890, top: 590, fontFamily: 'Arial', fontSize: 8, originX: 'center',
+  originY: 'center',});
+musicText.hasControls = musicText.hasBorders = false;
+musicText.lockMovementX = musicText.lockMovementY = true;
+musicText.selectable = false
+musicText.evented = false
+
+
+var datex = new Date();
+var n =  datex.getHours() + ":" + datex.getMinutes() + ":" + datex.getSeconds();
+var date = new fabric.Text(n, { left: 1030, top: 590, fontFamily: 'Arial', fontSize: 8, originX: 'center',
+  originY: 'center',});
+date.hasControls = date.hasBorders = false;
+date.lockMovementX = date.lockMovementY = true;
+date.selectable = false
+date.evented = false
+
+
+
+var onbtn = document.getElementById('onbtn');
+var poweron = new fabric.Image(onbtn, {
+  left: 890,
+  top: 412,
+  angle: 0,
+  width: 20,
+  height: 20,
+  originY: 'center', originX: 'center',
+  
+});
+
+poweron.hasControls = poweron.hasBorders = false;
+poweron.lockMovementX = poweron.lockMovementY = true;
+
+
+var offbtn = document.getElementById('offbtn');
+var poweroff = new fabric.Image(offbtn, {
+  left: 890,
+  top: 412,
+  angle: 0,
+  width: 20,
+  height: 20,
+  originY: 'center', originX: 'center',
+  visible: false
+});
+
+poweroff.hasControls = poweroff.hasBorders = false;
+poweroff.lockMovementX = poweroff.lockMovementY = true;
+
+
+
+
+
+
+poweroff.on('selected',function(){
+   poweroff.visible = false;
+   poweron.visible = true;
+
+
+
+});
+
+
+
+var shwbtn = document.getElementById('showerslider');
+var showerslider1 = new fabric.Image(shwbtn, {
+  left: 980,
+  top: 402,
+  
+ // visible: true,
+  height:16,
+  width:16
+  
+});
+
+shwbtn.hasControls = shwbtn.hasBorders = false;
+shwbtn.lockMovementX = shwbtn.lockMovementY = true;
+
+var bathbtn = document.getElementById('bathslider');
+var bathslider1 = new fabric.Image(bathbtn, {
+  left: 980,
+  top: 402,
+  
+  visible: false,
+  height:16,
+  width:16
+  
+});
+
+bathbtn.hasControls = bathbtn.hasBorders = false;
+bathbtn.lockMovementX = bathbtn.lockMovementY = true;
+
+var showerText = new fabric.Text('Shower', { left: 1015, top: 410, fontFamily: 'Arial', fontSize: 10, originX: 'center',
+  originY: 'center',  });
+showerText.hasControls = showerText.hasBorders = false;
+showerText.lockMovementX = showerText.lockMovementY = true;
+showerText.selectable = false
+showerText.evented = false
+
+var bathText = new fabric.Text('Bath', { left: 965, top: 410, fontFamily: 'Arial', fontSize: 10, originX: 'center',
+  originY: 'center', opacity:0.2, });
+bathText.hasControls = bathText.hasBorders = false;
+bathText.lockMovementX = bathText.lockMovementY = true;
+bathText.selectable = false
+bathText.evented = false
+
+
+showerslider1.on('selected',function(){
+    showerslider1.visible = false;
+    bathslider1.visible = true;
+    bathText.opacity = 1.0;
+    showerText.opacity = 0.3;
+    canvas.deactivateAll();
+
+});
+
+bathslider1.on('selected',function(){
+    bathslider1.visible = false;
+    showerslider1.visible = true;
+    showerText.opacity = 1.0;
+    bathText.opacity = 0.3;
+    canvas.deactivateAll();
+
+});
+
+
+
+
+
+
+
+// Menu Icons
+var userx = document.getElementById('users');
+var users = new fabric.Image(userx, {
+  left: 890,
+  top: 450,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+
+  
+});
+
+users.hasControls = users.hasBorders = false;
+users.lockMovementX = users.lockMovementY = true;
+
+var waterx = document.getElementById('water');
+var water = new fabric.Image(waterx, {
+  left: 950,
+  top: 450,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+
+  
+});
+
+water.hasControls = water.hasBorders = false;
+water.lockMovementX = water.lockMovementY = true;
+
+var tempx = document.getElementById('temp');
+var temp = new fabric.Image(tempx, {
+  left: 1010,
+  top: 450,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+
+  
+});
+temp.hasControls = temp.hasBorders = false;
+temp.lockMovementX = temp.lockMovementY = true;
+
+var bathtubx = document.getElementById('settings');
+var bathtub = new fabric.Image(bathtubx, {
+  left: 890,
+  top: 505,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+
+  
+});
+
+bathtub.hasControls = bathtub.hasBorders = false;
+bathtub.lockMovementX = bathtub.lockMovementY = true;
+
+var musicx = document.getElementById('music');
+var music = new fabric.Image(musicx, {
+  left: 950,
+  top: 505,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+
+  
+});
+
+music.hasControls = music.hasBorders = false;
+music.lockMovementX = music.lockMovementY = true;
+
+var lightx = document.getElementById('light');
+var light = new fabric.Image(lightx, {
+  left: 1010,
+  top: 505,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  opacity: 0.5,
+  
+});
+
+
+light.hasControls = light.hasBorders = false;
+light.lockMovementX = light.lockMovementY = true;
+
+
+
+
+// users panel
+var adduserx = document.getElementById('adduser');
+var adduser = new fabric.Image(adduserx, {
+  left: 890,
+  top: 450,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+
+adduser.hasControls = adduser.hasBorders = false;
+adduser.lockMovementX = adduser.lockMovementY = true;
+
+
+var user1x = document.getElementById('user1');
+var user1 = new fabric.Image(user1x, {
+  left: 950,
+  top: 450,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+
+user1.hasControls = user1.hasBorders = false;
+user1.lockMovementX = user1.lockMovementY = true;
+
+var user2x = document.getElementById('user2');
+var user2 = new fabric.Image(user2x, {
+  left: 1010,
+  top: 450,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+user2.hasControls = user2.hasBorders = false;
+user2.lockMovementX = user2.lockMovementY = true;
+
+var user3x = document.getElementById('user3');
+var user3 = new fabric.Image(user3x, {
+  left: 890,
+  top: 505,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+user3.hasControls = user3.hasBorders = false;
+user3.lockMovementX = user3.lockMovementY = true;
+
+var guestx = document.getElementById('guest');
+var guest = new fabric.Image(guestx, {
+  left: 950,
+  top: 505,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+guest.hasControls = guest.hasBorders = false;
+guest.lockMovementX = guest.lockMovementY = true;
+
+
+
+//music
+
+var popx = document.getElementById('pop');
+var pop = new fabric.Image(popx, {
+  left: 890,
+  top: 505,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+pop.hasControls = pop.hasBorders = false;
+pop.lockMovementX = pop.lockMovementY = true;
+
+var classicalx = document.getElementById('classical');
+var classical = new fabric.Image(classicalx, {
+  left: 950,
+  top: 450,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+classical.hasControls = classical.hasBorders = false;
+classical.lockMovementX = classical.lockMovementY = true;
+
+var metalx = document.getElementById('metal');
+var metal = new fabric.Image(metalx, {
+  left: 1010,
+  top: 450,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+metal.hasControls = metal.hasBorders = false;
+metal.lockMovementX = metal.lockMovementY = true;
+
+
+var rockx = document.getElementById('rock');
+var rock = new fabric.Image(rockx, {
+  left: 890,
+  top: 450,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+rock.hasControls = rock.hasBorders = false;
+rock.lockMovementX = rock.lockMovementY = true;
+
+var jazzx = document.getElementById('jazz');
+var jazz = new fabric.Image(jazzx, {
+  left: 950,
+  top: 505,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+jazz.hasControls = jazz.hasBorders = false;
+jazz.lockMovementX = jazz.lockMovementY = true;
+
+
+var backx = document.getElementById('back');
+var back = new fabric.Image(backx, {
+  left: 890,
+  top: 410,
+  angle: 0,
+  width: 30,
+  height: 20,
+  originY: 'center', originX: 'center',
+  visible: false,
+
+  
+});
+back.hasControls = back.hasBorders = false;
+back.lockMovementX = back.lockMovementY = true;
+
+var popx = document.getElementById('pop');
+var pop = new fabric.Image(popx, {
+  left: 890,
+  top: 505,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+pop.hasControls = pop.hasBorders = false;
+pop.lockMovementX = pop.lockMovementY = true;
+
+var volx = document.getElementById('volume');
+var vol = new fabric.Image(volx, {
+  left: 1010,
+  top: 505,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+vol.hasControls = vol.hasBorders = false;
+vol.lockMovementX = vol.lockMovementY = true;
+
+
+
+var mutex = document.getElementById('mute');
+var mute = new fabric.Image(mutex, {
+  left: 890,
+  top: 450,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+
+mute.hasControls = mute.hasBorders = false;
+mute.lockMovementX = mute.lockMovementY = true;
+
+
+var volupx = document.getElementById('sound');
+var volup = new fabric.Image(volupx, {
+  left: 950,
+  top: 450,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+
+volup.hasControls = volup.hasBorders = false;
+volup.lockMovementX = volup.lockMovementY = true;
+
+
+vol.on('selected',function(){
+    hidemusic();
+    volup.visible = true;
+    mute.visible = true;
+
+
+
+});
+
+var tempupx = document.getElementById('up');
+var tempup = new fabric.Image(tempupx, {
+  left: 990,
+  top: 475,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+tempup.hasControls = tempup.hasBorders = false;
+tempup.lockMovementX = tempup.lockMovementY = true;
+
+var tempdownx = document.getElementById('down');
+var tempdown = new fabric.Image(tempdownx, {
+  left: 990,
+  top: 495,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+tempdown.hasControls = tempdown.hasBorders = false;
+tempdown.lockMovementX = tempdown.lockMovementY = true;
+
+var textboxx = document.getElementById('textbox');
+var textbox = new fabric.Image(textboxx, {
+  left: 930,
+  top: 485,
+  angle: 0,
+  width: 40,
+  height: 30,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+textbox.hasControls = textbox.hasBorders = false;
+textbox.lockMovementX = textbox.lockMovementY = true;
+
+var watertempx = document.getElementById('watertemp');
+var watertemp = new fabric.Image(watertempx, {
+  left: 900,
+  top: 445,
+  angle: 0,
+  width: 20,
+  height: 20,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+watertemp.hasControls = watertemp.hasBorders = false;
+watertemp.lockMovementX = watertemp.lockMovementY = true;
+
+
+
+var watertxt = new fabric.Text('Set Water Temperature', { left: 960, top: 445, fontFamily: 'Arial', fontSize: 10, fontWeight: 'italic', visible: false,
+    originX: 'center', originY: 'center',});
+
+    watertxt.hasControls = watertxt.hasBorders = false;
+    watertxt.lockMovementX = watertxt.lockMovementY = true;
+    watertxt.selectable = false;
+    watertxt.evented = false;   
+
+var temperature = new fabric.Text('0', { left: 935, top: 490, fontFamily: 'Arial', fontSize: 18, fontWeight: 'italic', visible: false,
+    originX: 'center', originY: 'center',});
+
+    temperature.hasControls = temperature.hasBorders = false;
+    temperature.lockMovementX = temperature.lockMovementY = true;
+    temperature.selectable = false;
+    temperature.evented = false;       
+
+tempup.on('selected',function(){
+   inctemp();
+   canvas.deactivateAll();
+
+
+});
+
+tempdown.on('selected',function(){
+   dectemp();
+   canvas.deactivateAll();
+
+
+});
+
+
+
+function inctemp(){
+  t = parseInt(temperature.text);
+  if(t<60){
+
+    t = t+5;
+  }
+
+  t2 = t.toString();
+  temperature.text = t2;
+
+
+}
+
+function dectemp(){
+  t = parseInt(temperature.text);
+  if(t>0){
+
+    t = t-5;
+  }
+
+  t2 = t.toString();
+  temperature.text = t2;
+
+
+}
+
+
+
+
+var waterupx = document.getElementById('up');
+var waterup = new fabric.Image(waterupx, {
+  left: 990,
+  top: 475,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+waterup.hasControls = waterup.hasBorders = false;
+waterup.lockMovementX = waterup.lockMovementY = true;
+
+var waterdownx = document.getElementById('down');
+var waterdown = new fabric.Image(waterdownx, {
+  left: 990,
+  top: 495,
+  angle: 0,
+  width: 40,
+  height: 40,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+waterdown.hasControls = waterdown.hasBorders = false;
+waterdown.lockMovementX = waterdown.lockMovementY = true;
+
+var textbox2x = document.getElementById('textbox');
+var textbox2 = new fabric.Image(textbox2x, {
+  left: 930,
+  top: 485,
+  angle: 0,
+  width: 40,
+  height: 30,
+  originY: 'center', originX: 'center',
+  visible: false,
+});
+textbox2.hasControls = textbox2.hasBorders = false;
+textbox2.lockMovementX = textbox2.lockMovementY = true;
+
+
+
+
+
+var watertxt2 = new fabric.Text('Set Water Quantity', { left: 960, top: 445, fontFamily: 'Arial', fontSize: 10, fontWeight: 'italic', visible: false,
+    originX: 'center', originY: 'center',});
+
+    watertxt2.hasControls = watertxt2.hasBorders = false;
+    watertxt2.lockMovementX = watertxt2.lockMovementY = true;
+    watertxt2.selectable = false;
+    watertxt2.evented = false;   
+
+var waterquantity = new fabric.Text('0', { left: 935, top: 490, fontFamily: 'Arial', fontSize: 18, fontWeight: 'italic', visible: false,
+    originX: 'center', originY: 'center',});
+
+    waterquantity.hasControls = waterquantity.hasBorders = false;
+    waterquantity.lockMovementX = waterquantity.lockMovementY = true;
+    waterquantity.selectable = false;
+    waterquantity.evented = false;       
+
+waterup.on('selected',function(){
+   incwater();
+   canvas.deactivateAll();
+
+
+});
+
+waterdown.on('selected',function(){
+   decwater();
+   canvas.deactivateAll();
+
+
+});
+
+
+
+
+function incwater(){
+  t = parseInt(waterquantity.text);
+  if(t<60){
+
+    t = t+5;
+  }
+
+  t2 = t.toString();
+  waterquantity.text = t2;
+
+
+}
+
+function decwater(){
+  t = parseInt(waterquantity.text);
+  if(t>0){
+
+    t = t-5;
+  }
+
+  t2 = t.toString();
+  waterquantity.text = t2;
+
+
+}
+
+
+
+
+
+
+
+
+users.on('selected',function(){
+    hidemainmenu();
+    showusers();
+    back.visible = true;
+
+});
+
+water.on('selected',function(){
+    hidemainmenu();
+    showwatermenu();
+
+});
+
+temp.on('selected',function(){
+    hidemainmenu();
+    showtempmenu();
+    
+
+});
+
+
+
+music.on('selected',function(){
+    hidemainmenu();
+    showmusic();
+
+});
+
+
+
+light.on('selected',function(){
+    if(light.opacity==0.5){
+      light.opacity=1.0;
+      lightbulb.opacity = 1.0,
+      canvas.deactivateAll();
+    }
+    else{
+      light.opacity=0.5;
+      lightbulb.opacity = 0.3,
+      canvas.deactivateAll();
+    }
+
+});
+
+
+poweron.on('selected',function(){
+   poweronshower();
+
+
+});
+
+back.on('selected',function(){
+    
+    hideusers();
+    hidemusic();
+    hidetempmenu();
+    showmainmenu();
+    hidewatermenu();
+    hidesettings();
+     volup.visible = false;
+    mute.visible = false;
+    
+
+
+});
+
+
+pop.on('selected',function(){
+    hidemusic();
+    showmainmenu();
+    musicText.text = "♫ Playing Pop ♫";
+
+});
+
+rock.on('selected',function(){
+    hidemusic();
+    showmainmenu();
+    musicText.text = "♫ Playing Rock ♫";
+
+});
+
+classical.on('selected',function(){
+    hidemusic();
+    showmainmenu();
+    musicText.text = "♫ Playing Classical ♫";
+
+});
+
+jazz.on('selected',function(){
+    hidemusic();
+    showmainmenu();
+    musicText.text = "♫ Playing Jazz ♫";
+
+});
+
+metal.on('selected',function(){
+    hidemusic();
+    showmainmenu();
+    musicText.text = "♫ Playing Metal ♫";
+
+});
+
+
+
+
+
+function poweronshower(){
+  //poweron.visible = false;
+  poweroff.visible = true;
+
+
+}
+
+/*var $ = function(id){return document.getElementById(id)};
+
+var scaleControl = $('scale-control');
+  scaleControl.onchange = function() {
+    circle.scale(parseFloat(this.value)).setCoords();
+    canvas.renderAll();
+  };
+
+ function updateControls() {
+    scaleControl.value = circle.getScaleX();
+    
+  }  
+*/
+
+
+
+var bathtxt = new fabric.Text('Bath/Shower', { left: 1730, top: 610, fontFamily: 'Arial', fontSize: 10, fontWeight: 'italic', 
+    originX: 'center', originY: 'center',});
+
+    bathtxt.hasControls = bathtxt.hasBorders = false;
+    bathtxt.lockMovementX = bathtxt.lockMovementY = true;
+    bathtxt.selectable = false
+    bathtxt.evented = false       
+
+
+var engbtnx = document.getElementById('showerslider');
+var engbtn = new fabric.Image(engbtnx, {
+  left: 940,
+  top: 460,
+  
+  visible: false,
+  height:16,
+  width:16
+  
+});
+
+engbtn.hasControls = engbtn.hasBorders = false;
+engbtn.lockMovementX = engbtn.lockMovementY = true;
+
+var spabtnx = document.getElementById('bathslider');
+var spabtn = new fabric.Image(spabtnx, {
+  left: 940,
+  top: 460,
+  
+  visible: false,
+  height:16,
+  width:16
+  
+});
+
+spabtn.hasControls = spabtn.hasBorders = false;
+spabtn.lockMovementX = spabtn.lockMovementY = true;
+
+var engtxt = new fabric.Text('English', { left: 975, top: 470, fontFamily: 'Arial', fontSize: 8, originX: 'center',
+  originY: 'center',opacity:1.0, visible:false,});
+engtxt.hasControls = engtxt.hasBorders = false;
+engtxt.lockMovementX = engtxt.lockMovementY = true;
+engtxt.selectable = false;
+engtxt.evented = false;
+
+var spatxt = new fabric.Text('Español', { left: 920, top: 470, fontFamily: 'Arial', fontSize: 8, originX: 'center',
+  originY: 'center',opacity:0.5,visible:false, });
+spatxt.hasControls = spatxt.hasBorders = false;
+spatxt.lockMovementX = spatxt.lockMovementY = true;
+spatxt.selectable = false;
+spatxt.evented = false;
+
+
+
+bathtub.on('selected',function(){
+    hidemainmenu();
+    engbtn.visible = true;
+    engtxt.visible = true;
+    spatxt.visible = true;
+   // spabtn.visible = true;
+   
+
+});
+
+engbtn.on('selected',function(){
+    engbtn.visible = false;
+    spabtn.visible = true;
+    spatxt.opacity = 1.0;
+    engtxt.opacity = 0.5;
+    showerText.text = "Ducha";
+    bathText.text = "Bañera";
+    musicText.text = "♫ Hay Música ♫";
+
+
+});
+
+spabtn.on('selected',function(){
+    engbtn.visible = true;
+    spabtn.visible = false;
+    spatxt.opacity = 0.5;
+    engtxt.opacity = 1.0;
+     showerText.text = "Shower";
+    bathText.text = "Bath";
+    musicText.text = "♫ No Music Playing ♫";
+   
+
+});
+
+function hidesettings(){
+    engbtn.visible = false;
+    spabtn.visible = false;
+    engtxt.visible = false;
+    spatxt.visible = false;
+
+}
+
+
+
+function hidemainmenu(){
+    users.visible = false;
+    water.visible = false;
+    temp.visible = false;
+    bathtub.visible = false;
+    music.visible = false;
+    light.visible = false;
+
+    poweron.visible = false;
+    poweroff.visible = false;
+    bathtxt.visible = false;
+    back.visible = true;
+}
+
+function showmainmenu(){
+    users.visible = true;
+    water.visible = true;
+    temp.visible = true;
+    bathtub.visible = true;
+    music.visible = true;
+    light.visible = true;
+    back.visible = false;
+    poweron.visible = true;
+
+    
+
+    //onofftxt.visible = true;
+    bathtxt.visible = true;
+
+
+}
+
+function showtempmenu(){
+    tempdown.visible = true;
+    tempup.visible = true;
+    textbox.visible = true;
+    watertxt.visible = true;
+    watertemp.visible = true;
+    temperature.visible = true;
+
+
+}
+
+function hidetempmenu(){
+    tempdown.visible = false;
+    tempup.visible = false;
+    textbox.visible = false;
+    watertxt.visible = false;
+    watertemp.visible = false;
+    temperature.visible = false;
+
+
+}
+
+function showwatermenu(){
+
+    waterdown.visible = true;
+    waterup.visible = true;
+    textbox2.visible = true;
+    watertxt2.visible = true;
+    waterquantity.visible = true;
+   
+
+
+}
+
+function hidewatermenu(){
+
+    waterdown.visible = false;
+    waterup.visible = false;
+    textbox2.visible = false;
+    watertxt2.visible = false;
+    waterquantity.visible = false;
+
+
+}
+
+function showusers(){
+  adduser.visible = true;
+  user1.visible = true;
+  user2.visible = true;
+  user3.visible = true;
+  guest.visible = true;
+  
+
+
+
+}
+
+function hideusers(){
+  adduser.visible = false;
+  user1.visible = false;
+  user2.visible = false;
+  user3.visible = false;
+  guest.visible = false;
+
+}
+
+function showmusic(){
+  hidemainmenu();
+  pop.visible = true;
+  classical.visible = true;
+  rock.visible = true;
+  metal.visible = true;
+  jazz.visible = true;
+  vol.visible = true;
+}
+
+function hidemusic(){
+  hidemainmenu();
+  pop.visible = false;
+  classical.visible = false;
+  rock.visible = false;
+  metal.visible = false;
+  jazz.visible = false;
+  vol.visible = false;
+}
+
+
+
+
+
+
+canvas.add(backWall);
+canvas.add(sideWall);
+canvas.add(frontWall);
+canvas.add(showerHead);
+canvas.add(bathSpout);
+canvas.add(panel);
+canvas.add(soapicon5);
+canvas.add(soapicon1);
+canvas.add(soapicon2);
+canvas.add(soapicon3);
+canvas.add(soapicon4);
+canvas.add(shampooicon5);
+canvas.add(shampooicon1);
+canvas.add(shampooicon2);
+canvas.add(shampooicon3);
+canvas.add(shampooicon4);
+canvas.add(facewashicon5);
+canvas.add(facewashicon1);
+canvas.add(facewashicon2);
+canvas.add(facewashicon3);
+canvas.add(facewashicon4);
+canvas.add(poweron);
+canvas.add(poweroff);
+canvas.add(showerslider1);
+canvas.add(bathslider1);
+canvas.add(users);
+canvas.add(water);
+canvas.add(temp);
+canvas.add(bathtub);
+canvas.add(music);
+canvas.add(light);
+canvas.add(adduser);
+canvas.add(user1);
+canvas.add(user2);
+canvas.add(user3);
+canvas.add(guest);
+canvas.add(pop);
+canvas.add(classical);
+canvas.add(metal);
+canvas.add(rock);
+canvas.add(jazz);
+canvas.add(soap);
+canvas.add(shampoo);
+canvas.add(facewash);
+canvas.add(back);
+canvas.add(lightbulb);
+canvas.add(musicText);
+canvas.add(date);
+canvas.add(showerText);
+canvas.add(bathText);
+canvas.add(bathtubimg);
+canvas.add(plug);
+canvas.add(knob);
+canvas.add(knob2);
+canvas.add(low1);
+canvas.add(low2);
+canvas.add(high1);
+canvas.add(high2);
+canvas.add(tempT);
+canvas.add(waterW);
+canvas.add(speaker1);
+canvas.add(speaker2);
+canvas.add(showerarrow);
+canvas.add(faucet1);
+canvas.add(faucet2);
+canvas.add(faucet3);
+canvas.add(soap2);
+canvas.add(shampoo2);
+canvas.add(facewash2);
+canvas.add(tempdown);
+canvas.add(tempup);
+canvas.add(textbox);
+canvas.add(watertxt);
+canvas.add(watertemp);
+canvas.add(temperature);
+canvas.add(waterdown);
+canvas.add(waterup);
+canvas.add(textbox2);
+canvas.add(watertxt2);
+canvas.add(waterquantity);
+canvas.add(vol);
+canvas.add(volup);
+canvas.add(mute);
+canvas.add(handle);
+canvas.add(engbtn);
+canvas.add(spabtn);
+canvas.add(engtxt);
+canvas.add(spatxt);
+
+
+
+
+
+
+
+// code adapted from http://jsfiddle.net/tornado1979/39up3jcm/
+function zoomAll(SCALE_FACTOR) {
+;
+
+      var objects = canvas.getObjects();
+      for (var i in objects) {
+          var scaleX = objects[i].scaleX;
+          var scaleY = objects[i].scaleY;
+          var left = objects[i].left;
+          var top = objects[i].top;
+
+          var tempScaleX = scaleX * SCALE_FACTOR;
+          var tempScaleY = scaleY * SCALE_FACTOR;
+          var tempLeft = left * SCALE_FACTOR;
+          var tempTop = top * SCALE_FACTOR;
+
+          objects[i].scaleX = tempScaleX;
+          objects[i].scaleY = tempScaleY;
+          objects[i].left = tempLeft;
+          objects[i].top = tempTop;
+
+          objects[i].setCoords();
+      }
+  
+     
+      canvas.renderAll();
+  }
+
+
+zoomAll(canvas.height / localHeight);
+
+})();
+
+
+
+
+</script>
+		
+</head>
+  
+</html>
